@@ -36,11 +36,11 @@ public class UserEntity extends BaseEntity {
     private List<RoleEntity> roles = new ArrayList<>();
 
     // thủ công
-//    @OneToMany(mappedBy = "staff", fetch = FetchType.LAZY)
-//    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
+    @OneToMany(mappedBy = "staff", fetch = FetchType.LAZY)
+    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
     // tự động
-    @ManyToMany(mappedBy = "staff", fetch = FetchType.LAZY)
-    private List<BuildingEntity> buildingEntities = new ArrayList<>();
+//    @ManyToMany(mappedBy = "staff", fetch = FetchType.LAZY)
+//    private List<BuildingEntity> buildingEntities = new ArrayList<>();
 
 //    @OneToMany(mappedBy="users", fetch = FetchType.LAZY)
 //    private List<UserRoleEntity> userRoleEntities = new ArrayList<>();
@@ -49,21 +49,21 @@ public class UserEntity extends BaseEntity {
         return serialVersionUID;
     }
 
-//    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
-//        return assignmentBuildingEntities;
+    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
+        return assignmentBuildingEntities;
+    }
+
+    public void setAssignmentBuildingEntities(List<AssignmentBuildingEntity> assignmentBuildingEntities) {
+        this.assignmentBuildingEntities = assignmentBuildingEntities;
+    }
+
+//    public List<BuildingEntity> getBuildingEntities() {
+//        return buildingEntities;
 //    }
 //
-//    public void setAssignmentBuildingEntities(List<AssignmentBuildingEntity> assignmentBuildingEntities) {
-//        this.assignmentBuildingEntities = assignmentBuildingEntities;
+//    public void setBuildingEntities(List<BuildingEntity> buildingEntities) {
+//        this.buildingEntities = buildingEntities;
 //    }
-
-    public List<BuildingEntity> getBuildingEntities() {
-        return buildingEntities;
-    }
-
-    public void setBuildingEntities(List<BuildingEntity> buildingEntities) {
-        this.buildingEntities = buildingEntities;
-    }
 
     public String getUserName() {
         return userName;

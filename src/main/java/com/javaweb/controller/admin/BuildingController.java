@@ -30,24 +30,15 @@ public class BuildingController {
     @Autowired
     private IBuildingService buildingService;
 
-    @Autowired
-    private BuildingSearchResponseConverter buildingSearchResponseConverter;
-
     @RequestMapping(value = "/admin/building-list", method = RequestMethod.GET)
     public ModelAndView buildingList(@ModelAttribute BuildingSearchRequest buildingSearchRequest, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("admin/building/list");
         mav.addObject("modelSearchRequest", buildingSearchRequest);
 
-        // lấy tất cả toà nhà từ DB
-        List<BuildingEntity> result = buildingService.getAllBuildings();
-        List<BuildingSearchResponse> buildingSearchResponses = new ArrayList<>();
+        // lấy tất cả toà nhà từ DB hoặc lấy các toà nhà theo BuildingSearchRequest
+        List<BuildingSearchResponse> result = buildingService.getAllBuildings(buildingSearchRequest);
 
-        for (BuildingEntity buildingEntity : result) {
-            BuildingSearchResponse buildingSearchResponse = buildingSearchResponseConverter.toBuildingSearchResponse(buildingEntity);
-            buildingSearchResponses.add(buildingSearchResponse);
-        }
-
-        mav.addObject("buildingResultList", buildingSearchResponses);
+        mav.addObject("buildingResultList", result);
         mav.addObject("staffList", userService.getStaff());
         mav.addObject("districts", DistrictCode.type());
         mav.addObject("typeCodes", BuildingType.type());

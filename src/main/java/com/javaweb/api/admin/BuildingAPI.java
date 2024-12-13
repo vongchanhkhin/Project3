@@ -6,19 +6,28 @@ import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.model.response.StaffResponseDTO;
 import com.javaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController(value = "buildingAPIOfAdmin")
 @RequestMapping("/api/building")
+@Transactional
 public class BuildingAPI {
     @Autowired
     IBuildingService buildingService;
 
     @PostMapping
-    public BuildingDTO addOrUpdateBuilding(@RequestBody BuildingDTO buildingDTO) {
-        return buildingDTO;
+    public ResponseEntity<Object> addOrUpdateBuilding(@RequestBody BuildingDTO buildingDTO) {
+        try {
+            buildingService.addOrUpdateBuilding(buildingDTO);
+            return ResponseEntity.ok(buildingDTO);
+        }
+        catch (Exception e){
+            return ResponseEntity.ok(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{ids}")

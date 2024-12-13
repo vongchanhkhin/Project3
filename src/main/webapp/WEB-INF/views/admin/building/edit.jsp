@@ -198,9 +198,14 @@
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Hình ảnh</label>
-                            <div class="col-xs-9">
-                                <form:input path="image" cssClass="form-control"/>
-                            </div>
+<%--                            <input type="file" class="col-xs-3" name="" id="uploadImage">--%>
+<%--                            <c:if test="${not empty buildingEdit.image}">--%>
+<%--                                <div class="col-xs-6">--%>
+<%--                                    <c:set var="imagePath" value="/repository/${buildingEdit.image}"/>--%>
+<%--                                    <img src="${imagePath}" id="viewImage" width="300px" height="300px"--%>
+<%--                                         alt="Building Image">--%>
+<%--                                </div>--%>
+<%--                            </c:if>--%>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3"></label>
@@ -237,15 +242,27 @@
             } else {
                 typeCode.push(v.value);
             }
+
+            // if(imageBase64 !== '') {
+            //     data['imageBase64'] = imageBase64;
+            //     data['imageName'] = imageName;
+            // }
         });
         data['typeCode'] = typeCode;
-        if (typeCode != "") {
-            addOrUpdateBuilding(data);
-        } else window.location.href = "<c:url value="/admin/building-edit?typeCode=required"/>";
 
+
+        if (typeCode != '') {
+            executingAddOrUpdateBuilding(data);
+        } else window.location.href = '<c:url value="/admin/building-edit?typeCode=require"/>';
     });
 
-    function addOrUpdateBuilding(data) {
+
+
+    $('#btnCancel').click(function () {
+        window.location.href = "/admin/building-list";
+    });
+
+    function executingAddOrUpdateBuilding(data) {
         $.ajax({
             type: "POST",
             url: "${buildingAPI}",
@@ -254,16 +271,15 @@
             dataType: "JSON",
             success: function (res) {
                 console.log("success");
+                window.location.href = '<c:url value="/admin/building-edit?message=success"/>';
             },
             error: function (res) {
                 console.log(res);
+                window.location.href = '<c:url value="/admin/building-edit?message=error"/>';
+
             }
         });
     }
-
-    $('#btnCancel').click(function () {
-        window.location.href = "/admin/building-list";
-    });
 </script>
 </body>
 </html>

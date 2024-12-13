@@ -260,45 +260,46 @@
                         </thead>
 
                         <tbody>
-                        <c:forEach var="item" items="${buildingResultList}">
-                            <tr>
-                                <td class="center">
-                                    <label class="pos-rel">
-                                        <input type="checkbox" name="checkList" class="check-box-element"
-                                               value="${item.id}" id="checkbox_${item.id}">
-                                        <span class="lbl"></span>
-                                    </label>
-                                </td>
-                                <td>${item.name}</td>
-                                <td>${item.address}</td>
-                                <td>${item.numberOfBasement}</td>
-                                <td>${item.rentPrice}</td>
-                                <td>${item.managerName}</td>
-                                <td>${item.managerPhone}</td>
-                                <td>${item.rentArea}</td>
-                                <td>${item.emptyArea}</td>
-                                <td>${item.rentArea}</td>
-                                <td>${item.serviceFee}</td>
-                                <td>${item.brokerageFee}</td>
-                                <td>
-                                    <div class="hidden-sm hidden-xs btn-group">
-                                        <button class="btn btn-xs btn-success" title="Giao toà nhà"
-                                                onclick="assignmentBuilding(${item.id})">
-                                            <i class="ace-icon glyphicon glyphicon-list"></i>
-                                        </button>
+                            <c:forEach var="item" items="${buildingResultList}">
+                                <tr>
+                                    <td class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" name="checkList" class="check-box-element"
+                                                   value="${item.id}" id="checkbox_${item.id}">
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>
+                                    <td>${item.name}</td>
+                                    <td>${item.address}</td>
+                                    <td>${item.numberOfBasement}</td>
+                                    <td>${item.rentPrice}</td>
+                                    <td>${item.managerName}</td>
+                                    <td>${item.managerPhone}</td>
+                                    <td>${item.rentArea}</td>
+                                    <td>${item.emptyArea}</td>
+                                    <td>${item.rentArea}</td>
+                                    <td>${item.serviceFee}</td>
+                                    <td>${item.brokerageFee}</td>
+                                    <td>
+                                        <div class="hidden-sm hidden-xs btn-group">
+                                            <button class="btn btn-xs btn-success" title="Giao toà nhà"
+                                                    onclick="assignmentBuilding(${item.id})">
+                                                <i class="ace-icon glyphicon glyphicon-list"></i>
+                                            </button>
 
-                                        <a class="btn btn-xs btn-info" href="/admin/building-edit-${item.id}"
-                                           title="Sửa toà nhà">
-                                            <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                        </a>
+                                            <a class="btn btn-xs btn-info" href="/admin/building-edit-${item.id}"
+                                               title="Sửa toà nhà">
+                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                            </a>
 
-                                        <button class="btn btn-xs btn-danger" title="Xoá toà nhà" onclick="deleteBuilding(${item.id})">
-                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                                            <button class="btn btn-xs btn-danger" title="Xoá toà nhà"
+                                                    onclick="deleteBuilding(${item.id})">
+                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </div><!-- /.span -->
@@ -318,10 +319,10 @@
                 <table id="staffList" class="table table-striped table-bordered table-hover center"
                        style="margin: 3em 0 1.5em;">
                     <thead>
-                        <tr>
-                            <th class="center">Chọn</th>
-                            <th class="center">Tên nhân viên</th>
-                        </tr>
+                    <tr>
+                        <th class="center">Chọn</th>
+                        <th class="center">Tên nhân viên</th>
+                    </tr>
                     </thead>
                     <tbody>
 
@@ -378,7 +379,7 @@
             return $(this).val();
         }).get();
         data['staffs'] = staffs;
-        if(staffs != '') {
+        if (staffs != '') {
             executingAssignmentBuilding(data);
         }
     });
@@ -415,7 +416,7 @@
     // xoá nhiều building
     $('#btnDeleteBuilding').click(function (e) {
         e.preventDefault();
-        var buildingIds = $('#buildingResultListTable').find('tbody input[type=checkbox]:checked').map(function() {
+        var buildingIds = $('#buildingResultListTable').find('tbody input[type=checkbox]:checked').map(function () {
             return $(this).val();
         }).get();
         executingDeleteBuilding(buildingIds);

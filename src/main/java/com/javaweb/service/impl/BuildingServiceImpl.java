@@ -1,18 +1,29 @@
 package com.javaweb.service.impl;
 
+import com.javaweb.builder.BuildingSearchBuilder;
+import com.javaweb.converter.BuildingSearchBuilderConverter;
+import com.javaweb.converter.BuildingSearchResponseConverter;
+import com.javaweb.entity.AssignmentBuildingEntity;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.UserEntity;
+import com.javaweb.model.dto.BuildingDTO;
+import com.javaweb.model.request.BuildingSearchRequest;
+import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.model.response.StaffResponseDTO;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.service.IBuildingService;
+import com.javaweb.service.IRentAreaService;
+import com.javaweb.utils.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BuildingServiceImpl implements IBuildingService {
@@ -22,11 +33,30 @@ public class BuildingServiceImpl implements IBuildingService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BuildingSearchResponseConverter buildingSearchResponseConverter;
+
+    @Autowired
+    private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
+
+    @Autowired
+    private IRentAreaService rentAreaService;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public ResponseDTO getAllStaffInAssignmentBuilding(Long buildingId) {
         BuildingEntity building = buildingRepository.findById(buildingId).get();
         List<UserEntity> staff = userRepository.findByStatusAndRoles_Code(1, "STAFF");
-        List<UserEntity> staffAssignment = building.getStaff();
+        List<AssignmentBuildingEntity> assignmentBuildingEntities = building.getAssignmentBuildingEntities();
+//        List<UserEntity> staffAssignment = building.getStaff();
+        List<UserEntity> staffAssignment = new ArrayList<>();
+        for (AssignmentBuildingEntity assignmentBuildingEntity : assignmentBuildingEntities) {
+            UserEntity userEntity = assignmentBuildingEntity.getStaff();
+            staffAssignment.add(userEntity);
+        }
+
         List<StaffResponseDTO> staffResponseDTOS = new ArrayList<>();
         ResponseDTO responseDTO = new ResponseDTO();
 
@@ -50,8 +80,31 @@ public class BuildingServiceImpl implements IBuildingService {
     }
 
     @Override
-    public List<BuildingEntity> getAllBuildings() {
-        List<BuildingEntity> buildings = buildingRepository.findAll();
-        return buildings;
+    public List<BuildingSearchResponse> getAllBuildings(BuildingSearchRequest buildingSearchRequest) {
+        BuildingSearchBuilder buildingSearchBuilder = buildingSearchBuilderConverter.toBuildingSearchBuilder(buildingSearchRequest);
+        List<BuildingEntity> buildingEntities = buildingRepository.findAll(buildingSearchBuilder);
+
+        List<BuildingSearchResponse> result = new ArrayList<>();
+        for (BuildingEntity buildingEntity : buildingEntities) {
+            BuildingSearchResponse buildingSearchResponse = buildingSearchResponseConverter.toBuildingSearchResponse(buildingEntity);
+            result.add(buildingSearchResponse);
+        }
+
+        return result;
+    }
+
+    @Override
+    public void addOrUpdateBuilding(BuildingDTO buildingDTO) {
+        BuildingEntity buildingEntity = modelMapper.map(buildingDTO,BuildingEntity.class);
+        String typeCode = buildingDTO.getTypeCode().stream().map(i -> i.toString()).collect(Collectors.joining(","));
+        buildingEntity.setTypeCode(typeCode);
+
+        buildingRepository.save(buildingEntity);
+
+        buildingDTO.setId(buildingEntity.getId());
+        if(StringUtils.check(buildingDTO.getRentArea())) {
+            rentAreaService.addRentArea(buildingDTO);
+        }
+
     }
 }
