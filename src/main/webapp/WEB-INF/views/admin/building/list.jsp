@@ -240,7 +240,7 @@
                         <tr>
                             <th class="center">
                                 <label class="pos-rel">
-                                    <input type="checkbox" class="ace">
+                                    <input type="checkbox" id="selectAll" class="ace" onclick="selectAllCheckbox()">
                                     <span class="lbl"></span>
                                 </label>
                             </th>
@@ -366,9 +366,35 @@
             error: function (res) {
                 console.log("fail");
                 console.log(res);
-                window.location.href = "<c:url value="/admin/building-list?message=error"/>";
+                window.location.href = "<c:url value="/admin/building-list?message=loadStaffError"/>";
             }
         });
+    }
+
+    function executingAssignmentBuilding(data) {
+        $.ajax({
+            type: "PUT",
+            url: "${buildingAPI}",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (res) {
+                console.info("success");
+                window.location.href = "<c:url value="/admin/building-list?message=assignmentSuccess"/>";
+            },
+            error: function (res) {
+                console.info("Giao toà nhà không thành công!");
+                console.log(res);
+                window.location.href = "<c:url value="/admin/building-list?message=assignmentError"/>";
+            }
+        });
+    }
+
+    function selectAllCheckbox() {
+        var checkboxes = $('.check-box-element');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = $('#selectAll').is(':checked');
+        }
     }
 
     $('#btnAssignmentBuilding').click(function (e) {
@@ -384,23 +410,7 @@
         }
     });
 
-    function executingAssignmentBuilding(data) {
-        $.ajax({
-            type: "POST",
-            url: "${buildingAPI}" + "/assignment",
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            dataType: "json",
-            success: function (res) {
-                console.info("success");
-            },
-            error: function (res) {
-                console.info("Giao toà nhà không thành công!");
-                console.log(res);
-                window.location.href = "<c:url value="/admin/building-list?message=error"/>";
-            }
-        });
-    }
+
 
     $('#btnSearchBuilding').click(function (e) {
         e.preventDefault();
@@ -410,7 +420,7 @@
     // xoá 1 building
     function deleteBuilding(id) {
         var buildingId = [id];
-        executingDeleteBuilding(buildingId);
+        executingDeleteBuildings(buildingId);
     }
 
     // xoá nhiều building
@@ -419,21 +429,23 @@
         var buildingIds = $('#buildingResultListTable').find('tbody input[type=checkbox]:checked').map(function () {
             return $(this).val();
         }).get();
-        executingDeleteBuilding(buildingIds);
+        executingDeleteBuildings(buildingIds);
     });
 
-    function executingDeleteBuilding(data) {
+    function executingDeleteBuildings(data) {
         $.ajax({
             type: "DELETE",
             url: "${buildingAPI}/" + data,
             data: JSON.stringify(data),
             contentType: "application/json",
-            dataType: "JSON",
+            dataType: "json",
             success: function (res) {
                 console.log("success");
+                window.location.href = '<c:url value="/admin/building-list?message=deleteBuildingSuccess"/>';
             },
             error: function (res) {
-                console.log(res);
+                console.log("fail");
+                window.location.href = '<c:url value="/admin/building-list?message=deleteBuildingError"/>';
             }
         });
     }

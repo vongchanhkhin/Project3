@@ -14,4 +14,5 @@ public interface IBuildingService {
     ResponseDTO getAllStaffInAssignmentBuilding(Long buildingId);
     List<BuildingSearchResponse> getAllBuildings(BuildingSearchRequest buildingSearchRequest);
     void addOrUpdateBuilding(BuildingDTO buildingDTO);
+    void deleteBuildings(Long[] ids);
 }

@@ -23,6 +23,9 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "district")
     private String district;
 
+    @Column(name = "structure")
+    private String structure;
+
     @Column(name = "numberofbasement")
     private Long numberOfBasement;
 
@@ -38,14 +41,44 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "rentprice")
     private Long rentPrice;
 
+    @Column(name = "rentpricedescription")
+    private String rentPriceDescription;
+
     @Column(name = "servicefee")
     private String serviceFee;
+
+    @Column(name = "carfee")
+    private String carFee;
+
+    @Column(name = "motofee")
+    private String motoFee;
+
+    @Column(name = "overtimefee")
+    private String overtimeFee;
+
+    @Column(name = "electricityfee")
+    private String electricityFee;
+
+    @Column(name = "deposit")
+    private String deposit;
+
+    @Column(name = "payment")
+    private String payment;
+
+    @Column(name = "renttime")
+    private String rentTime;
+
+    @Column(name = "decorationtime")
+    private String decorationTime;
 
     @Column(name = "brokeragefee")
     private Double brokerageFee;
 
     @Column(name = "type")
     private String typeCode;
+
+    @Column(name = "note")
+    private String note;
 
     @Column(name = "managername")
     private String managerName;
@@ -166,6 +199,94 @@ public class BuildingEntity extends BaseEntity {
 
     public String getTypeCode() {
         return typeCode;
+    }
+
+    public String getStructure() {
+        return structure;
+    }
+
+    public void setStructure(String structure) {
+        this.structure = structure;
+    }
+
+    public String getRentPriceDescription() {
+        return rentPriceDescription;
+    }
+
+    public void setRentPriceDescription(String rentPriceDescription) {
+        this.rentPriceDescription = rentPriceDescription;
+    }
+
+    public String getCarFee() {
+        return carFee;
+    }
+
+    public void setCarFee(String carFee) {
+        this.carFee = carFee;
+    }
+
+    public String getMotoFee() {
+        return motoFee;
+    }
+
+    public void setMotoFee(String motoFee) {
+        this.motoFee = motoFee;
+    }
+
+    public String getOvertimeFee() {
+        return overtimeFee;
+    }
+
+    public void setOvertimeFee(String overtimeFee) {
+        this.overtimeFee = overtimeFee;
+    }
+
+    public String getElectricityFee() {
+        return electricityFee;
+    }
+
+    public void setElectricityFee(String electricityFee) {
+        this.electricityFee = electricityFee;
+    }
+
+    public String getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(String deposit) {
+        this.deposit = deposit;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
+    public String getRentTime() {
+        return rentTime;
+    }
+
+    public void setRentTime(String rentTime) {
+        this.rentTime = rentTime;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getDecorationTime() {
+        return decorationTime;
+    }
+
+    public void setDecorationTime(String decorationTime) {
+        this.decorationTime = decorationTime;
     }
 
     public void setTypeCode(String typeCode) {

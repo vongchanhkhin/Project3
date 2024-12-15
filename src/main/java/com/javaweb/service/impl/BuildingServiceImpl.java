@@ -11,7 +11,9 @@ import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.model.response.StaffResponseDTO;
+import com.javaweb.repository.AssignmentBuildingRepository;
 import com.javaweb.repository.BuildingRepository;
+import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IRentAreaService;
@@ -19,6 +21,7 @@ import com.javaweb.utils.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class BuildingServiceImpl implements IBuildingService {
     @Autowired
     private BuildingRepository buildingRepository;
@@ -34,23 +38,29 @@ public class BuildingServiceImpl implements IBuildingService {
     private UserRepository userRepository;
 
     @Autowired
-    private BuildingSearchResponseConverter buildingSearchResponseConverter;
-
-    @Autowired
-    private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
+    private AssignmentBuildingRepository assignmentBuildingRepository;
 
     @Autowired
     private IRentAreaService rentAreaService;
 
     @Autowired
+    private BuildingSearchResponseConverter buildingSearchResponseConverter;
+
+    @Autowired
+    private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
+
+
+    @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private RentAreaRepository rentAreaRepository;
 
     @Override
     public ResponseDTO getAllStaffInAssignmentBuilding(Long buildingId) {
         BuildingEntity building = buildingRepository.findById(buildingId).get();
         List<UserEntity> staff = userRepository.findByStatusAndRoles_Code(1, "STAFF");
         List<AssignmentBuildingEntity> assignmentBuildingEntities = building.getAssignmentBuildingEntities();
-//        List<UserEntity> staffAssignment = building.getStaff();
+
         List<UserEntity> staffAssignment = new ArrayList<>();
         for (AssignmentBuildingEntity assignmentBuildingEntity : assignmentBuildingEntities) {
             UserEntity userEntity = assignmentBuildingEntity.getStaff();
@@ -60,15 +70,14 @@ public class BuildingServiceImpl implements IBuildingService {
         List<StaffResponseDTO> staffResponseDTOS = new ArrayList<>();
         ResponseDTO responseDTO = new ResponseDTO();
 
-        for(UserEntity user : staff){
+        for (UserEntity user : staff) {
             StaffResponseDTO staffResponseDTO = new StaffResponseDTO();
             staffResponseDTO.setStaffId(user.getId());
             staffResponseDTO.setFullName(user.getFullName());
 
-            if(staffAssignment.contains(user)) {
+            if (staffAssignment.contains(user)) {
                 staffResponseDTO.setChecked("checked");
-            }
-            else staffResponseDTO.setChecked("");
+            } else staffResponseDTO.setChecked("");
 
             staffResponseDTOS.add(staffResponseDTO);
         }
@@ -95,16 +104,24 @@ public class BuildingServiceImpl implements IBuildingService {
 
     @Override
     public void addOrUpdateBuilding(BuildingDTO buildingDTO) {
-        BuildingEntity buildingEntity = modelMapper.map(buildingDTO,BuildingEntity.class);
+        BuildingEntity buildingEntity = modelMapper.map(buildingDTO, BuildingEntity.class);
         String typeCode = buildingDTO.getTypeCode().stream().map(i -> i.toString()).collect(Collectors.joining(","));
         buildingEntity.setTypeCode(typeCode);
 
         buildingRepository.save(buildingEntity);
 
-        buildingDTO.setId(buildingEntity.getId());
-        if(StringUtils.check(buildingDTO.getRentArea())) {
+        if (buildingDTO.getId() == null) {
+            buildingDTO.setId(buildingEntity.getId());
+        }
+        if (StringUtils.check(buildingDTO.getRentArea())) {
             rentAreaService.addRentArea(buildingDTO);
         }
+    }
 
+    @Override
+    public void deleteBuildings(Long[] ids) {
+        rentAreaRepository.deleteByBuildingIdIn(ids);
+        assignmentBuildingRepository.deleteByBuildingIdIn(ids);
+        buildingRepository.deleteByIdIn(ids);
     }
 }

@@ -3,47 +3,59 @@ package com.javaweb.api.admin;
 import com.javaweb.model.dto.AssignmentBuildingDTO;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.response.ResponseDTO;
-import com.javaweb.model.response.StaffResponseDTO;
+import com.javaweb.service.IAssignmentBuildingService;
 import com.javaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController(value = "buildingAPIOfAdmin")
 @RequestMapping("/api/building")
-@Transactional
 public class BuildingAPI {
     @Autowired
-    IBuildingService buildingService;
+    private IBuildingService buildingService;
+
+    @Autowired
+    private IAssignmentBuildingService assignmentBuildingService;
 
     @PostMapping
     public ResponseEntity<Object> addOrUpdateBuilding(@RequestBody BuildingDTO buildingDTO) {
         try {
             buildingService.addOrUpdateBuilding(buildingDTO);
             return ResponseEntity.ok(buildingDTO);
-        }
-        catch (Exception e){
-            return ResponseEntity.ok(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{ids}")
-    public void deleteBuilding(@PathVariable Long[] ids) {
+    public ResponseEntity<Object> deleteBuilding(@PathVariable Long[] ids) {
+        // Validate input
+        if (ids == null || ids.length == 0) {
+            return ResponseEntity.badRequest().body("No IDs provided");
+        }
         //xuong DB xoa building theo id gui ve
-        System.out.println("ok");
+        try {
+            buildingService.deleteBuildings(ids);
+            return ResponseEntity.noContent().build(); // HTTP 204: No Content
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}/staffs")
-    public ResponseDTO getStaffs(@PathVariable Long id){
+    public ResponseDTO getStaffs(@PathVariable Long id) {
         ResponseDTO result = buildingService.getAllStaffInAssignmentBuilding(id);
         return result;
     }
 
-    @PostMapping("/assignment")
-    public void updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
-        System.out.println("ok");
+    @PutMapping()
+    public ResponseEntity<Object> updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
+        try {
+            assignmentBuildingService.addAssignmentBuilding(assignmentBuildingDTO);
+            return ResponseEntity.ok(assignmentBuildingDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

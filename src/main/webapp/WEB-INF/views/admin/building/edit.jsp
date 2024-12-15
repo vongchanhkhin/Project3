@@ -198,14 +198,14 @@
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Hình ảnh</label>
-<%--                            <input type="file" class="col-xs-3" name="" id="uploadImage">--%>
-<%--                            <c:if test="${not empty buildingEdit.image}">--%>
-<%--                                <div class="col-xs-6">--%>
-<%--                                    <c:set var="imagePath" value="/repository/${buildingEdit.image}"/>--%>
-<%--                                    <img src="${imagePath}" id="viewImage" width="300px" height="300px"--%>
-<%--                                         alt="Building Image">--%>
-<%--                                </div>--%>
-<%--                            </c:if>--%>
+                                <%--                            <input type="file" class="col-xs-3" name="" id="uploadImage">--%>
+                                <%--                            <c:if test="${not empty buildingEdit.image}">--%>
+                                <%--                                <div class="col-xs-6">--%>
+                                <%--                                    <c:set var="imagePath" value="/repository/${buildingEdit.image}"/>--%>
+                                <%--                                    <img src="${imagePath}" id="viewImage" width="300px" height="300px"--%>
+                                <%--                                         alt="Building Image">--%>
+                                <%--                                </div>--%>
+                                <%--                            </c:if>--%>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3"></label>
@@ -232,6 +232,24 @@
     </div>
 </div>
 <script>
+    window.onload = function () {
+        var formData = $('#form-edit').serializeArray();
+        $.each(formData, function (i, v) {
+            if (v.name == 'typeCode') {
+                switch (v.value) {
+                    case 'NGUYEN_CAN':
+                        $('#typeCode1').attr('checked', true);
+                        break;
+                    case 'NOI_THAT':
+                        $('#typeCode2').attr('checked', true);
+                        break;
+                    case 'TANG_TRET':
+                        $('#typeCode3').attr('checked', true);
+                        break;
+                }
+            }
+        });
+    }
     $('#btnAddOrUpdateBuilding').click(function () {
         var data = {};
         var typeCode = [];
@@ -256,8 +274,6 @@
         } else window.location.href = '<c:url value="/admin/building-edit?typeCode=require"/>';
     });
 
-
-
     $('#btnCancel').click(function () {
         window.location.href = "/admin/building-list";
     });
@@ -268,15 +284,14 @@
             url: "${buildingAPI}",
             data: JSON.stringify(data),
             contentType: "application/json",
-            dataType: "JSON",
+            dataType: "json",
             success: function (res) {
                 console.log("success");
-                window.location.href = '<c:url value="/admin/building-edit?message=success"/>';
+                window.location.href = '<c:url value="/admin/building-list?message=success"/>';
             },
             error: function (res) {
                 console.log(res);
-                window.location.href = '<c:url value="/admin/building-edit?message=error"/>';
-
+                window.location.href = '<c:url value="/admin/building-list?message=error"/>';
             }
         });
     }
