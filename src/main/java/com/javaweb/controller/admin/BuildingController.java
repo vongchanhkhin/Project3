@@ -1,6 +1,7 @@
 package com.javaweb.controller.admin;
 
 
+import com.javaweb.constant.SystemConstant;
 import com.javaweb.converter.BuildingSearchResponseConverter;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.enums.BuildingType;
@@ -11,8 +12,12 @@ import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IUserService;
+import com.javaweb.utils.DisplayTagUtils;
+import com.javaweb.utils.MessageUtils;
+import org.apache.commons.lang.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller(value = "buildingControllerOfAdmin")
@@ -39,18 +45,28 @@ public class BuildingController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private MessageUtils messageUtils;
+
     @RequestMapping(value = "/admin/building-list", method = RequestMethod.GET)
-    public ModelAndView buildingList(@ModelAttribute BuildingSearchRequest buildingSearchRequest, HttpServletRequest request) {
+    public ModelAndView buildingList(@ModelAttribute(SystemConstant.MODEL) BuildingSearchRequest model, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("admin/building/list");
-        mav.addObject("modelSearchRequest", buildingSearchRequest);
+        mav.addObject("modelSearchRequest", model);
 
+        DisplayTagUtils.of(request, model);
         // lấy tất cả toà nhà từ DB hoặc lấy các toà nhà theo BuildingSearchRequest
-        List<BuildingSearchResponse> result = buildingService.getAllBuildings(buildingSearchRequest);
+        List<BuildingSearchResponse> result = buildingService.getAllBuildings(model, PageRequest.of(model.getPage() - 1, model.getMaxPageItems()));
+        model.setListResult(result);
+        model.setTotalItems(buildingService.countTotalItems());
 
-        mav.addObject("buildingResultList", result);
+
+        mav.addObject("buildingResultList", model);
         mav.addObject("staffList", userService.getStaff());
         mav.addObject("districts", DistrictCode.type());
         mav.addObject("typeCodes", BuildingType.type());
+
+        initMessageResponse(mav, request);
+
         return mav;
     }
 
@@ -59,6 +75,8 @@ public class BuildingController {
         ModelAndView mav = new ModelAndView("admin/building/edit");
         mav.addObject("districts", DistrictCode.type());
         mav.addObject("typeCodes", BuildingType.type());
+        initMessageResponse(mav, request);
+
         return mav;
     }
 
@@ -80,5 +98,14 @@ public class BuildingController {
         mav.addObject("districts", DistrictCode.type());
         mav.addObject("typeCodes", BuildingType.type());
         return mav;
+    }
+
+    private void initMessageResponse(ModelAndView mav, HttpServletRequest request) {
+        String message = request.getParameter("message");
+        if (message != null && StringUtils.isNotEmpty(message)) {
+            Map<String, String> messageMap = messageUtils.getMessage(message);
+            mav.addObject(SystemConstant.ALERT, messageMap.get(SystemConstant.ALERT));
+            mav.addObject(SystemConstant.MESSAGE_RESPONSE, messageMap.get(SystemConstant.MESSAGE_RESPONSE));
+        }
     }
 }

@@ -20,6 +20,7 @@ import com.javaweb.service.IRentAreaService;
 import com.javaweb.utils.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,9 +90,9 @@ public class BuildingServiceImpl implements IBuildingService {
     }
 
     @Override
-    public List<BuildingSearchResponse> getAllBuildings(BuildingSearchRequest buildingSearchRequest) {
+    public List<BuildingSearchResponse> getAllBuildings(BuildingSearchRequest buildingSearchRequest, Pageable pageable) {
         BuildingSearchBuilder buildingSearchBuilder = buildingSearchBuilderConverter.toBuildingSearchBuilder(buildingSearchRequest);
-        List<BuildingEntity> buildingEntities = buildingRepository.findAll(buildingSearchBuilder);
+        List<BuildingEntity> buildingEntities = buildingRepository.findAll(buildingSearchBuilder, pageable);
 
         List<BuildingSearchResponse> result = new ArrayList<>();
         for (BuildingEntity buildingEntity : buildingEntities) {
@@ -123,5 +124,10 @@ public class BuildingServiceImpl implements IBuildingService {
         rentAreaRepository.deleteByBuildingIdIn(ids);
         assignmentBuildingRepository.deleteByBuildingIdIn(ids);
         buildingRepository.deleteByIdIn(ids);
+    }
+
+    @Override
+    public int countTotalItems() {
+        return buildingRepository.countTotalItems();
     }
 }

@@ -7,12 +7,14 @@ import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.model.response.StaffResponseDTO;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface IBuildingService {
     ResponseDTO getAllStaffInAssignmentBuilding(Long buildingId);
-    List<BuildingSearchResponse> getAllBuildings(BuildingSearchRequest buildingSearchRequest);
+    List<BuildingSearchResponse> getAllBuildings(BuildingSearchRequest buildingSearchRequest, Pageable pageable);
     void addOrUpdateBuilding(BuildingDTO buildingDTO);
     void deleteBuildings(Long[] ids);
+    int countTotalItems();
 }

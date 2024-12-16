@@ -77,7 +77,8 @@
                                                     </label>
                                                     <div class="col-sm-8">
                                                         <div class="fg-line">
-                                                            <form:input path="searchValue" cssClass="form-control input-sm"/>
+                                                            <form:input path="searchValue"
+                                                                        cssClass="form-control input-sm"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -112,7 +113,7 @@
                                             <button id="btnDelete" type="button" disabled
                                                     class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
                                                     data-toggle="tooltip"
-                                                    title="Xóa bài viết" onclick="warningBeforeDelete()">
+                                                    title="Xóa người dùng" onclick="warningBeforeDelete()">
 															<span>
 																<i class="fa fa-trash-o bigger-110 pink"></i>
 															</span>
@@ -133,8 +134,8 @@
                                                    class="table table-fcv-ace table-striped table-bordered table-hover dataTable no-footer"
                                                    style="margin: 3em 0 1.5em;">
                                         <display:column title="<fieldset class='form-group'>
-												        <input type='checkbox' id='checkAll' class='check-box-element'>
-												        </fieldset>" class="center select-cell"
+												                    <input type='checkbox' id='checkAll' class='check-box-element'>
+												                </fieldset>" class="center select-cell"
                                                         headerClass="center select-cell">
                                             <fieldset>
                                                 <input type="checkbox" name="checkList" value="${tableList.id}"
@@ -175,8 +176,8 @@
     });
 
     function warningBeforeDelete() {
-        showAlertBeforeDelete(function () {
-            event.preventDefault();
+        showAlertBeforeDelete(function (e) {
+            e.preventDefault();
             var dataArray = $('tbody input[type=checkbox]:checked').map(function () {
                 return $(this).val();
             }).get();

@@ -271,7 +271,8 @@
 
         if (typeCode != '') {
             executingAddOrUpdateBuilding(data);
-        } else window.location.href = '<c:url value="/admin/building-edit?typeCode=require"/>';
+        }
+        else window.location.href = '<c:url value="/admin/building-edit?typeCode=require"/>';
     });
 
     $('#btnCancel').click(function () {
@@ -287,11 +288,13 @@
             dataType: "json",
             success: function (res) {
                 console.log("success");
-                window.location.href = '<c:url value="/admin/building-list?message=success"/>';
+                if(data.id != null)
+                    window.location.href = '<c:url value="/admin/building-list?message=update_success"/>'
+                else window.location.href = '<c:url value="/admin/building-list?message=insert_success"/>';
             },
             error: function (res) {
                 console.log(res);
-                window.location.href = '<c:url value="/admin/building-list?message=error"/>';
+                window.location.href = '<c:url value="/admin/building-list?message=error_system"/>';
             }
         });
     }

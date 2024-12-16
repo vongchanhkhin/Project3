@@ -4,6 +4,7 @@ import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import com.javaweb.utils.StringUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
+
+    private static Integer TOTAL_ITEM = 0;
 
     public static void joinTable(BuildingSearchBuilder buildingSearchBuilder, StringBuilder sql) {
         Long staffId = buildingSearchBuilder.getStaffId();
@@ -42,17 +45,17 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 String fieldName = f.getName();
 
                 if (!fieldName.equals("staffId")
-                    && !fieldName.equals("typeCode")
-                    && !fieldName.startsWith("area")
-                    && !fieldName.startsWith("rentPrice")) {
+                        && !fieldName.equals("typeCode")
+                        && !fieldName.startsWith("area")
+                        && !fieldName.startsWith("rentPrice")) {
 
                     Object value = f.get(buildingSearchBuilder);
 
                     if (value != null) {
                         if (f.getType().getName().equals("java.lang.Integer")
-                            || f.getType().getName().equals("java.lang.Long")
-                            || f.getType().getName().equals("java.lang.Float")
-                            || f.getType().getName().equals("java.lang.Double")) {
+                                || f.getType().getName().equals("java.lang.Long")
+                                || f.getType().getName().equals("java.lang.Float")
+                                || f.getType().getName().equals("java.lang.Double")) {
 
                             where.append("AND b." + fieldName.toLowerCase() + " = " + value + " ");
 
@@ -126,7 +129,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     }
 
     @Override
-    public List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder) {
+    public List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder, Pageable pageable) {
         StringBuilder sql = new StringBuilder("SELECT b.* FROM building b ");
 
         joinTable(buildingSearchBuilder, sql);
@@ -140,8 +143,22 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
 
         sql.append(where);
 
-        Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
+        StringBuilder sqlCopy = new StringBuilder(sql.toString());
 
-        return query.getResultList();
+//        Query query1 = entityManager.createNativeQuery(sqlCopy.toString(), BuildingEntity.class);
+//        TOTAL_ITEM = query1.getResultList().size();
+
+//        sql.append(" LIMIT ").append(pageable.getPageSize()).append("\n")
+//                .append(" OFFSET ").append(pageable.getOffset());
+
+        Query query2 = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
+        TOTAL_ITEM = query2.getResultList().size();
+
+        return query2.getResultList();
+    }
+
+    @Override
+    public int countTotalItems() {
+        return TOTAL_ITEM;
     }
 }
