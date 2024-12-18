@@ -86,18 +86,19 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "managerphone")
     private String managerPhone;
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private List<RentAreaEntity> rentAreaEntities = new ArrayList<>();
 
     // thủ công
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
-    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
+//    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
+//    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
     // tự động
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "assignmentbuilding",
-//            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
-//            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
-//    List<UserEntity> staff = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "assignmentbuilding",
+            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
+    List<UserEntity> staff = new ArrayList<>();
 
     @Override
     public Long getId() {
@@ -317,19 +318,19 @@ public class BuildingEntity extends BaseEntity {
         this.rentAreaEntities = rentAreaEntities;
     }
 
-    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
-        return assignmentBuildingEntities;
-    }
-
-    public void setAssignmentBuildingEntities(List<AssignmentBuildingEntity> assignmentBuildingEntities) {
-        this.assignmentBuildingEntities = assignmentBuildingEntities;
-    }
-
-//    public List<UserEntity> getStaff() {
-//        return staff;
+//    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
+//        return assignmentBuildingEntities;
 //    }
 //
-//    public void setStaff(List<UserEntity> staff) {
-//        this.staff = staff;
+//    public void setAssignmentBuildingEntities(List<AssignmentBuildingEntity> assignmentBuildingEntities) {
+//        this.assignmentBuildingEntities = assignmentBuildingEntities;
 //    }
+
+    public List<UserEntity> getStaff() {
+        return staff;
+    }
+
+    public void setStaff(List<UserEntity> staff) {
+        this.staff = staff;
+    }
 }

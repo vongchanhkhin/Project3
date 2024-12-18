@@ -288,7 +288,7 @@
             dataType: "json",
             success: function (res) {
                 console.log("success");
-                if(data.id != null)
+                if(res.id != null)
                     window.location.href = '<c:url value="/admin/building-list?message=update_success"/>'
                 else window.location.href = '<c:url value="/admin/building-list?message=insert_success"/>';
             },

@@ -2,7 +2,6 @@ package com.javaweb.controller.admin;
 
 
 import com.javaweb.constant.SystemConstant;
-import com.javaweb.converter.BuildingSearchResponseConverter;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.enums.BuildingType;
 import com.javaweb.enums.DistrictCode;
@@ -49,7 +48,7 @@ public class BuildingController {
     private MessageUtils messageUtils;
 
     @RequestMapping(value = "/admin/building-list", method = RequestMethod.GET)
-    public ModelAndView buildingList(@ModelAttribute(SystemConstant.MODEL) BuildingSearchRequest model, HttpServletRequest request) {
+    public ModelAndView buildingList(@ModelAttribute BuildingSearchRequest model, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("admin/building/list");
         mav.addObject("modelSearchRequest", model);
 

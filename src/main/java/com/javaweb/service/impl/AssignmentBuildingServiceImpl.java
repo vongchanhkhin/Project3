@@ -13,31 +13,31 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-@Transactional
-public class AssignmentBuildingServiceImpl implements IAssignmentBuildingService {
-    @Autowired
-    private AssignmentBuildingRepository assignmentBuildingRepository;
-
-    @Override
-    public void addAssignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
-        assignmentBuildingRepository.deleteByBuildingId(assignmentBuildingDTO.getBuildingId());
-
-        BuildingEntity buildingEntity = new BuildingEntity();
-        buildingEntity.setId(assignmentBuildingDTO.getBuildingId());
-
-        List<UserEntity> staffs = new ArrayList<>();
-        for (Long staffId : assignmentBuildingDTO.getStaffs()) {
-            UserEntity staff = new UserEntity();
-            staff.setId(staffId);
-            staffs.add(staff);
-        }
-
-        for (UserEntity staff : staffs) {
-            AssignmentBuildingEntity assignmentBuildingEntity = new AssignmentBuildingEntity();
-            assignmentBuildingEntity.setBuilding(buildingEntity);
-            assignmentBuildingEntity.setStaff(staff);
-            assignmentBuildingRepository.save(assignmentBuildingEntity);
-        }
-    }
+//@Service
+//@Transactional
+public class AssignmentBuildingServiceImpl {
+//    @Autowired
+//    private AssignmentBuildingRepository assignmentBuildingRepository;
+//
+//    @Override
+//    public void addAssignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
+//        assignmentBuildingRepository.deleteByBuildingId(assignmentBuildingDTO.getBuildingId());
+//
+//        BuildingEntity buildingEntity = new BuildingEntity();
+//        buildingEntity.setId(assignmentBuildingDTO.getBuildingId());
+//
+//        List<UserEntity> staffs = new ArrayList<>();
+//        for (Long staffId : assignmentBuildingDTO.getStaffs()) {
+//            UserEntity staff = new UserEntity();
+//            staff.setId(staffId);
+//            staffs.add(staff);
+//        }
+//
+//        for (UserEntity staff : staffs) {
+//            AssignmentBuildingEntity assignmentBuildingEntity = new AssignmentBuildingEntity();
+//            assignmentBuildingEntity.setBuilding(buildingEntity);
+//            assignmentBuildingEntity.setStaff(staff);
+//            assignmentBuildingRepository.save(assignmentBuildingEntity);
+//        }
+//    }
 }

@@ -15,9 +15,6 @@ public class BuildingAPI {
     @Autowired
     private IBuildingService buildingService;
 
-    @Autowired
-    private IAssignmentBuildingService assignmentBuildingService;
-
     @PostMapping
     public ResponseEntity<Object> addOrUpdateBuilding(@RequestBody BuildingDTO buildingDTO) {
         try {
@@ -52,7 +49,7 @@ public class BuildingAPI {
     @PutMapping()
     public ResponseEntity<Object> updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
         try {
-            assignmentBuildingService.addAssignmentBuilding(assignmentBuildingDTO);
+            buildingService.addAssignmentStaff(assignmentBuildingDTO);
             return ResponseEntity.ok(assignmentBuildingDTO);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
