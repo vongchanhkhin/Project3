@@ -16,7 +16,7 @@ public class BuildingAPI {
     private IBuildingService buildingService;
 
     @PostMapping
-    public ResponseEntity<Object> addOrUpdateBuilding(@RequestBody BuildingDTO buildingDTO) {
+    public ResponseEntity<?> addOrUpdateBuilding(@RequestBody BuildingDTO buildingDTO) {
         try {
             buildingService.addOrUpdateBuilding(buildingDTO);
             return ResponseEntity.ok(buildingDTO);
@@ -26,7 +26,7 @@ public class BuildingAPI {
     }
 
     @DeleteMapping("/{ids}")
-    public ResponseEntity<Object> deleteBuilding(@PathVariable Long[] ids) {
+    public ResponseEntity<?> deleteBuilding(@PathVariable Long[] ids) {
         // Validate input
         if (ids == null || ids.length == 0) {
             return ResponseEntity.badRequest().body("No IDs provided");
@@ -47,7 +47,7 @@ public class BuildingAPI {
     }
 
     @PutMapping()
-    public ResponseEntity<Object> updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
+    public ResponseEntity<?> updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
         try {
             buildingService.addAssignmentStaff(assignmentBuildingDTO);
             return ResponseEntity.ok(assignmentBuildingDTO);

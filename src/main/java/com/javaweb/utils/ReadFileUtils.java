@@ -18,7 +18,7 @@ public class ReadFileUtils extends HttpServlet {
         String imageUrl = request.getRequestURI();
         int repIndex = imageUrl.indexOf("/repository");
         String relativeImagePath = null;
-        if(repIndex != -1) {
+        if (repIndex != -1) {
             repIndex += "/repository".length();
             relativeImagePath = imageUrl.substring(repIndex);
         }
@@ -27,8 +27,8 @@ public class ReadFileUtils extends HttpServlet {
         FileInputStream fin = new FileInputStream("C://home/office" + relativeImagePath);
         BufferedInputStream bin = new BufferedInputStream(fin);
         BufferedOutputStream bout = new BufferedOutputStream(outStream);
-        int ch =0;
-        while((ch=bin.read())!=-1)
+        int ch = 0;
+        while ((ch = bin.read()) != -1)
             bout.write(ch);
         bin.close();
         fin.close();

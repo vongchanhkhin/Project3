@@ -129,13 +129,11 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     }
 
     @Override
-    public List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder, Pageable pageable) {
+    public List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder) {
         StringBuilder sql = new StringBuilder("SELECT b.* FROM building b ");
-
-        joinTable(buildingSearchBuilder, sql);
-
         StringBuilder where = new StringBuilder("where 1 = 1 ");
 
+        joinTable(buildingSearchBuilder, sql);
         queryNormal(buildingSearchBuilder, where);
         querySpecial(buildingSearchBuilder, where);
 
@@ -143,7 +141,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
 
         sql.append(where);
 
-        StringBuilder sqlCopy = new StringBuilder(sql.toString());
+//        StringBuilder sqlCopy = new StringBuilder(sql.toString());
 
 //        Query query1 = entityManager.createNativeQuery(sqlCopy.toString(), BuildingEntity.class);
 //        TOTAL_ITEM = query1.getResultList().size();

@@ -42,6 +42,9 @@ public class UserEntity extends BaseEntity {
     @ManyToMany(mappedBy = "staff", fetch = FetchType.LAZY)
     private List<BuildingEntity> buildingEntities = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "staff", fetch = FetchType.LAZY)
+    private List<CustomerEntity> customerEntities = new ArrayList<>();
+
 //    @OneToMany(mappedBy="users", fetch = FetchType.LAZY)
 //    private List<UserRoleEntity> userRoleEntities = new ArrayList<>();
 
@@ -63,6 +66,14 @@ public class UserEntity extends BaseEntity {
 
     public void setBuildingEntities(List<BuildingEntity> buildingEntities) {
         this.buildingEntities = buildingEntities;
+    }
+
+    public List<CustomerEntity> getCustomerEntities() {
+        return customerEntities;
+    }
+
+    public void setCustomerEntities(List<CustomerEntity> customerEntities) {
+        this.customerEntities = customerEntities;
     }
 
     public String getUserName() {

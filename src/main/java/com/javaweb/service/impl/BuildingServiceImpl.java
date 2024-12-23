@@ -62,9 +62,9 @@ public class BuildingServiceImpl implements IBuildingService {
     }
 
     @Override
-    public List<BuildingSearchResponse> getAllBuildings(BuildingSearchRequest buildingSearchRequest, Pageable pageable) {
+    public List<BuildingSearchResponse> getAllBuildings(BuildingSearchRequest buildingSearchRequest) {
         BuildingSearchBuilder buildingSearchBuilder = buildingConverter.toBuildingSearchBuilder(buildingSearchRequest);
-        List<BuildingEntity> buildingEntities = buildingRepository.findAll(buildingSearchBuilder, pageable);
+        List<BuildingEntity> buildingEntities = buildingRepository.findAll(buildingSearchBuilder);
 
         List<BuildingSearchResponse> result = new ArrayList<>();
         for (BuildingEntity buildingEntity : buildingEntities) {

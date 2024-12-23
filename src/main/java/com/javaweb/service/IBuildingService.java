@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface IBuildingService {
     ResponseDTO getAllStaffInAssignmentBuilding(Long buildingId);
-    List<BuildingSearchResponse> getAllBuildings(BuildingSearchRequest buildingSearchRequest, Pageable pageable);
+    List<BuildingSearchResponse> getAllBuildings(BuildingSearchRequest buildingSearchRequest);
     void addOrUpdateBuilding(BuildingDTO buildingDTO);
     void deleteBuildings(Long[] ids);
     int countTotalItems();

@@ -9,6 +9,7 @@ import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.repository.BuildingRepository;
+import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IUserService;
 import com.javaweb.utils.DisplayTagUtils;
@@ -53,16 +54,30 @@ public class BuildingController {
         mav.addObject("modelSearchRequest", model);
 
         DisplayTagUtils.of(request, model);
-        // lấy tất cả toà nhà từ DB hoặc lấy các toà nhà theo BuildingSearchRequest
-        List<BuildingSearchResponse> result = buildingService.getAllBuildings(model, PageRequest.of(model.getPage() - 1, model.getMaxPageItems()));
-        model.setListResult(result);
-        model.setTotalItems(buildingService.countTotalItems());
 
+        if(SecurityUtils.getAuthorities().contains(SystemConstant.STAFF_ROLE)) {
+            Long staffId = SecurityUtils.getPrincipal().getId();
+            model.setStaffId(staffId);
+            // lấy tất cả toà nhà từ DB hoặc lấy các toà nhà theo BuildingSearchRequest mà nhân viên đó phụ trách
+            List<BuildingSearchResponse> result = buildingService.getAllBuildings(model);
+            model.setListResult(result);
+            model.setTotalItems(buildingService.countTotalItems());
 
-        mav.addObject("buildingResultList", model);
+            mav.addObject("buildingResultList", model);
+        }
+        else {
+            // lấy tất cả toà nhà từ DB hoặc lấy các toà nhà theo BuildingSearchRequest
+            List<BuildingSearchResponse> result = buildingService.getAllBuildings(model);
+            model.setListResult(result);
+            model.setTotalItems(buildingService.countTotalItems());
+
+            mav.addObject("buildingResultList", model);
+        }
+
         mav.addObject("staffList", userService.getStaff());
         mav.addObject("districts", DistrictCode.type());
         mav.addObject("typeCodes", BuildingType.type());
+
 
         initMessageResponse(mav, request);
 
