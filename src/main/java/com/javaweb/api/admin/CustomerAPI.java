@@ -1,8 +1,10 @@
 package com.javaweb.api.admin;
 
 import com.javaweb.model.dto.CustomerDTO;
+import com.javaweb.model.dto.TransactionDTO;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.service.ICustomerService;
+import com.javaweb.service.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerAPI {
     @Autowired
     private ICustomerService customerService;
+
+    @Autowired
+    private ITransactionService transactionService;
 
     @PostMapping
     public ResponseEntity<?> addOrUpdateCustomer(@RequestBody CustomerDTO customerDTO) {

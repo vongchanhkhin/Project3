@@ -34,7 +34,7 @@ public class CustomerConverter {
 
     public CustomerEntity toCustomerEntity(CustomerDTO customerDTO) {
         CustomerEntity customerEntity = modelMapper.map(customerDTO, CustomerEntity.class);
-        customerEntity.setIsActive(1L);
+
         return customerEntity;
     }
 

@@ -9,16 +9,20 @@ public enum TransactionType {
     CSKH("Chăm Sóc Khách Hàng"),
     DDX("Dẫn Đi Xem");
 
-    private String name;
+    private final String name;
 
     TransactionType(String name) {
         this.name = name;
     }
 
-    public static Map<String, String> transactionType() {
+    public String getTransactionTypeName() {
+        return name;
+    }
+
+    public static Map<String, String> type() {
         Map<String, String> typeCodes = new LinkedHashMap<>();
         for (TransactionType type : TransactionType.values()) {
-            typeCodes.put(type.toString(), type.name());
+            typeCodes.put(type.toString(), type.name);
         }
 
         return typeCodes;

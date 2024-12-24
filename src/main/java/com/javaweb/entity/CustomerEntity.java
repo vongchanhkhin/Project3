@@ -32,9 +32,7 @@ public class CustomerEntity extends BaseEntity {
     @Column(name = "is_active")
     private Long isActive;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE},
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<TransactionEntity> transactionEntities = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

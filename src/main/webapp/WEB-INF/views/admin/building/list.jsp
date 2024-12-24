@@ -87,7 +87,7 @@
                                                 <div class="col-xs-2">
                                                     <label>Quận</label>
                                                     <form:select path="district" class="form-control">
-                                                        <form:option value="">---Chọn Quận---</form:option>
+                                                        <form:option value="">--- Chọn Quận ---</form:option>
                                                         <form:options items="${districts}"/>
                                                     </form:select>
                                                 </div>
@@ -258,8 +258,7 @@
                                    style="margin: 3em 0 1.5em;">
                         <display:column title="<fieldset class='form-group'>
                                                     <input type='checkbox' id='checkAll' class='check-box-element'>
-                                                </fieldset>" class="center select-cell"
-                                        headerClass="center select-cell">
+                                                </fieldset>" class="center select-cell" headerClass="center select-cell">
                             <fieldset>
                                 <input type="checkbox" name="checkList" value="${tableList.id}"
                                        id="checkbox_${tableList.id}" class="check-box-element"/>

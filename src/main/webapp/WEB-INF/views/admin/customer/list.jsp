@@ -88,7 +88,7 @@
                                                     <security:authorize access="hasRole('MANAGER')">
                                                         <label>Nhân viên</label>
                                                         <form:select path="staffId" class="form-control">
-                                                            <form:option value="">Chọn Nhân Viên</form:option>
+                                                            <form:option value="">--- Chọn Nhân Viên ---</form:option>
                                                             <form:options items="${staffList}"/>
                                                         </form:select>
                                                     </security:authorize>
@@ -152,8 +152,7 @@
                                    style="margin: 3em 0 1.5em;">
                         <display:column title="<fieldset class='form-group'>
                                                     <input type='checkbox' id='checkAll' class='check-box-element'>
-                                                </fieldset>" class="center select-cell"
-                                        headerClass="center select-cell">
+                                                </fieldset>" class="center select-cell">
                             <fieldset>
                                 <input type="checkbox" name="checkList" value="${tableList.id}"
                                        id="checkbox_${tableList.id}" class="check-box-element"/>
@@ -304,13 +303,6 @@
     //         }).get();
     //         executingDeleteBuildings(buildingIds);
     //     });
-    // }
-
-    // function selectAllCheckbox() {
-    //     var checkboxes = $('.check-box-element');
-    //     for (var i = 0; i < checkboxes.length; i++) {
-    //         checkboxes[i].checked = $('#selectAll').is(':checked');
-    //     }
     // }
 
     // $('#btnAssignmentBuilding').click(function (e) {

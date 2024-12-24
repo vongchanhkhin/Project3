@@ -2,10 +2,13 @@ package com.javaweb.service.impl;
 
 import com.javaweb.builder.CustomerSearchBuilder;
 import com.javaweb.converter.CustomerConverter;
+import com.javaweb.converter.TransactionConverter;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.CustomerEntity;
+import com.javaweb.entity.TransactionEntity;
 import com.javaweb.entity.UserEntity;
 import com.javaweb.model.dto.CustomerDTO;
+import com.javaweb.model.dto.TransactionDTO;
 import com.javaweb.model.request.CustomerSearchRequest;
 import com.javaweb.model.response.CustomerSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
@@ -66,8 +69,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
             if (staffAssignment.contains(user)) {
                 staffResponseDTO.setChecked("checked");
-            }
-            else staffResponseDTO.setChecked("");
+            } else staffResponseDTO.setChecked("");
 
             staffResponseDTOS.add(staffResponseDTO);
         }
@@ -81,6 +83,7 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     public void addOrUpdateCustomer(CustomerDTO customerDTO) {
         CustomerEntity customerEntity = customerConverter.toCustomerEntity(customerDTO);
+
         customerRepository.save(customerEntity);
         return;
     }

@@ -3,12 +3,16 @@ package com.javaweb.controller.admin;
 import com.javaweb.constant.SystemConstant;
 import com.javaweb.converter.CustomerConverter;
 import com.javaweb.entity.CustomerEntity;
+import com.javaweb.enums.StatusType;
+import com.javaweb.enums.TransactionType;
 import com.javaweb.model.dto.CustomerDTO;
+import com.javaweb.model.dto.TransactionDTO;
 import com.javaweb.model.request.CustomerSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.CustomerSearchResponse;
 import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.ICustomerService;
+import com.javaweb.service.ITransactionService;
 import com.javaweb.service.IUserService;
 import com.javaweb.service.impl.UserService;
 import com.javaweb.utils.DisplayTagUtils;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +38,9 @@ public class CustomerController {
 
     @Autowired
     private ICustomerService customerService;
+
+    @Autowired
+    private ITransactionService transactionService;
 
     @Autowired
     private MessageUtils messageUtils;
@@ -52,7 +60,20 @@ public class CustomerController {
             // lấy tất cả khách hàng từ DB hoặc lấy các khách hàng theo CustomerSearchRequest mà nhân viên đó phụ trách
             List<CustomerSearchResponse> result = customerService.getAllCustomers(model);
 
-            model.setListResult(result);
+            List<CustomerSearchResponse> modifiedResult = new ArrayList<>();
+            for (CustomerSearchResponse customerSearchResponse : result) {
+                if (StringUtils.isNotEmpty(customerSearchResponse.getStatus())) {
+                    for (Map.Entry<String, String> entry : StatusType.type().entrySet()) {
+                        if (customerSearchResponse.getStatus().equals(entry.getKey())) {
+                            customerSearchResponse.setStatus(entry.getValue());
+                            break;
+                        }
+                    }
+                }
+                modifiedResult.add(customerSearchResponse);
+            }
+
+            model.setListResult(modifiedResult);
             model.setTotalItems(customerService.countTotalItems());
 
             mav.addObject("customerResultList", model);
@@ -60,7 +81,20 @@ public class CustomerController {
             // lấy tất cả khách hàng từ DB hoặc lấy các khách hàng theo BuildingSearchRequest
             List<CustomerSearchResponse> result = customerService.getAllCustomers(model);
 
-            model.setListResult(result);
+            List<CustomerSearchResponse> modifiedResult = new ArrayList<>();
+            for (CustomerSearchResponse customerSearchResponse : result) {
+                if (StringUtils.isNotEmpty(customerSearchResponse.getStatus())) {
+                    for (Map.Entry<String, String> entry : StatusType.type().entrySet()) {
+                        if (customerSearchResponse.getStatus().equals(entry.getKey())) {
+                            customerSearchResponse.setStatus(entry.getValue());
+                            break;
+                        }
+                    }
+                }
+                modifiedResult.add(customerSearchResponse);
+            }
+
+            model.setListResult(modifiedResult);
             model.setTotalItems(customerService.countTotalItems());
 
             mav.addObject("customerResultList", model);
@@ -75,6 +109,7 @@ public class CustomerController {
     @RequestMapping(value = "/admin/customer-edit", method = RequestMethod.GET)
     public ModelAndView customerEdit(@ModelAttribute("customerEdit") CustomerDTO customerDTO, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("admin/customer/edit");
+        mav.addObject("statusTypes", StatusType.type());
 
         return mav;
     }
@@ -85,7 +120,13 @@ public class CustomerController {
         //xuong DB tim Customer theo id
         CustomerDTO result = customerService.getCustomerById(id);
 
+        //lay tat ca transaction tu DB thoe customerId
+        List<TransactionDTO> transactionDTOS = transactionService.getTransactionsByCustomerId(id);
+
         mav.addObject("customerEdit", result);
+        mav.addObject("transactions", transactionDTOS);
+        mav.addObject("statusTypes", StatusType.type());
+        mav.addObject("transactionTypes", TransactionType.type());
 
         return mav;
     }

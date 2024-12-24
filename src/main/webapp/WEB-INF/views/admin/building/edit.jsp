@@ -235,7 +235,7 @@
     window.onload = function () {
         var formData = $('#form-edit').serializeArray();
         $.each(formData, function (i, v) {
-            if (v.name == 'typeCode') {
+            if (v.name === 'typeCode') {
                 switch (v.value) {
                     case 'NGUYEN_CAN':
                         $('#typeCode1').attr('checked', true);
