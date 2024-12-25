@@ -177,7 +177,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public void delete(long[] ids) {
+    public void delete(Long[] ids) {
         for (Long item : ids) {
             UserEntity userEntity = userRepository.findById(item).get();
             userEntity.setStatus(0);

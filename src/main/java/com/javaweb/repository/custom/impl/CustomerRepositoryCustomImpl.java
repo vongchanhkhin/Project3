@@ -80,6 +80,7 @@ public class CustomerRepositoryCustomImpl implements CustomerRepositoryCustom {
 
         joinTable(customerSearchBuilder, sql);
         queryNormal(customerSearchBuilder, where);
+        where.append("AND c.is_active = 1 "); //lay nhung khach hang chua bi xoa
         querySpecial(customerSearchBuilder, where);
 
         where.append("GROUP BY c.id;");

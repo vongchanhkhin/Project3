@@ -1,6 +1,7 @@
 package com.javaweb.service;
 
 import com.javaweb.entity.CustomerEntity;
+import com.javaweb.model.dto.AssignmentCustomerDTO;
 import com.javaweb.model.dto.CustomerDTO;
 import com.javaweb.model.dto.TransactionDTO;
 import com.javaweb.model.request.CustomerSearchRequest;
@@ -15,5 +16,6 @@ public interface ICustomerService {
     ResponseDTO getAllStaffInAssignmentCustomer(Long customerId);
     void addOrUpdateCustomer(CustomerDTO customerDTO);
     CustomerDTO getCustomerById(Long customerId);
-
+    void deleteCustomer(Long[] ids);
+    void updateAssignmentCustomer(AssignmentCustomerDTO assignmentCustomerDTO);
 }

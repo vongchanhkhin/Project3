@@ -1,5 +1,6 @@
 package com.javaweb.api.admin;
 
+import com.javaweb.model.dto.AssignmentCustomerDTO;
 import com.javaweb.model.dto.CustomerDTO;
 import com.javaweb.model.dto.TransactionDTO;
 import com.javaweb.model.response.ResponseDTO;
@@ -32,6 +33,32 @@ public class CustomerAPI {
     public ResponseDTO getStaffs(@PathVariable Long id) {
         ResponseDTO result = customerService.getAllStaffInAssignmentCustomer(id);
         return result;
+    }
+
+    @DeleteMapping("/{ids}")
+    public ResponseEntity<?> deleteCustomer(@PathVariable Long[] ids) {
+        // Validate input
+        if (ids == null || ids.length == 0) {
+            return ResponseEntity.badRequest().body("No IDs provided");
+        }
+        try {
+            customerService.deleteCustomer(ids);
+            return ResponseEntity.noContent().build(); // HTTP 204: No Content
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateAssignmentCustomer(@RequestBody AssignmentCustomerDTO assignmentCustomerDTO) {
+        try {
+            customerService.updateAssignmentCustomer(assignmentCustomerDTO);
+            return ResponseEntity.ok(assignmentCustomerDTO);
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }

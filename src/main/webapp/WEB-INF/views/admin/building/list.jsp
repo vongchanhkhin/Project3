@@ -461,8 +461,8 @@
         $.ajax({
             type: "DELETE",
             url: "${buildingAPI}/" + data,
-            data: JSON.stringify(data),
-            contentType: "application/json",
+            // data: JSON.stringify(data),
+            // contentType: "application/json",
             dataType: "json",
             success: function (res) {
                 console.log("success");

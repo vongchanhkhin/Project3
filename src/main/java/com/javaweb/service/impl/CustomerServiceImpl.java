@@ -7,6 +7,7 @@ import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.CustomerEntity;
 import com.javaweb.entity.TransactionEntity;
 import com.javaweb.entity.UserEntity;
+import com.javaweb.model.dto.AssignmentCustomerDTO;
 import com.javaweb.model.dto.CustomerDTO;
 import com.javaweb.model.dto.TransactionDTO;
 import com.javaweb.model.request.CustomerSearchRequest;
@@ -85,7 +86,6 @@ public class CustomerServiceImpl implements ICustomerService {
         CustomerEntity customerEntity = customerConverter.toCustomerEntity(customerDTO);
 
         customerRepository.save(customerEntity);
-        return;
     }
 
     @Override
@@ -94,5 +94,23 @@ public class CustomerServiceImpl implements ICustomerService {
         CustomerDTO customerDTO = customerConverter.toCustomerDTO(customerEntity);
 
         return customerDTO;
+    }
+
+    @Override
+    public void deleteCustomer(Long[] ids) {
+        List<CustomerEntity> customerEntities = customerRepository.findByIdIn(ids);
+        for(CustomerEntity customerEntity : customerEntities) {
+            customerEntity.setIsActive(0L);
+            customerRepository.save(customerEntity);
+        }
+    }
+
+    @Override
+    public void updateAssignmentCustomer(AssignmentCustomerDTO assignmentCustomerDTO) {
+        CustomerEntity customerEntity = customerRepository.findById(assignmentCustomerDTO.getCustomerId()).get();
+        List<UserEntity> staff = userRepository.findByIdIn(assignmentCustomerDTO.getStaffs());
+        customerEntity.setStaff(staff);
+
+        customerRepository.save(customerEntity);
     }
 }

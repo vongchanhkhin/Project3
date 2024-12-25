@@ -30,7 +30,7 @@ public class CustomerEntity extends BaseEntity {
     private String status;
 
     @Column(name = "is_active")
-    private Long isActive;
+    private Long isActive = 1L;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<TransactionEntity> transactionEntities = new ArrayList<>();

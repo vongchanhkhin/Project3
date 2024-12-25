@@ -258,65 +258,57 @@
         });
     }
 
-    <%--function executingAssignmentCustomer(data) {--%>
-    <%--    $.ajax({--%>
-    <%--        type: "PUT",--%>
-    <%--        url: "${customerAPI}",--%>
-    <%--        data: JSON.stringify(data),--%>
-    <%--        contentType: "application/json",--%>
-    <%--        dataType: "json",--%>
-    <%--        success: function (res) {--%>
-    <%--            console.info("success");--%>
-    <%--            window.location.href = "<c:url value="/admin/building-list?message=assignmentSuccess"/>";--%>
-    <%--        },--%>
-    <%--        error: function (res) {--%>
-    <%--            console.info("Giao toà nhà không thành công!");--%>
-    <%--            console.log(res);--%>
-    <%--            window.location.href = "<c:url value="/admin/building-list?message=assignmentError"/>";--%>
-    <%--        }--%>
-    <%--    });--%>
-    <%--}--%>
+    function executingAssignmentCustomer(data) {
+        $.ajax({
+            type: "PUT",
+            url: "${customerAPI}",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (res) {
+                console.info("success");
+                window.location.href = "<c:url value="/admin/customer-list?message=assignment_success"/>";
+                alert("Giao khách hàng thành công.");
+            },
+            error: function (res) {
+                console.info("Giao khách hàng thất bại!");
+                console.log(res);
+                window.location.href = "<c:url value="/admin/customer-list?message=assignment_error"/>";
+                alert("Giao khách hàng thất bại!");
+            }
+        });
+    }
 
-    <%--function executingDeleteBuildings(data) {--%>
-    <%--    $.ajax({--%>
-    <%--        type: "DELETE",--%>
-    <%--        url: "${customerAPI}/" + data,--%>
-    <%--        data: JSON.stringify(data),--%>
-    <%--        contentType: "application/json",--%>
-    <%--        dataType: "json",--%>
-    <%--        success: function (res) {--%>
-    <%--            console.log("success");--%>
-    <%--            window.location.href = '<c:url value="/admin/building-list?message=delete_success"/>';--%>
-    <%--        },--%>
-    <%--        error: function (res) {--%>
-    <%--            console.log("fail");--%>
-    <%--            window.location.href = '<c:url value="/admin/building-list?message=error_system"/>';--%>
-    <%--        }--%>
-    <%--    });--%>
-    <%--}--%>
+    function executingDeleteCustomers(data) {
+        $.ajax({
+            type: "DELETE",
+            url: "${customerAPI}/" + data,
+            // data: JSON.stringify(data),
+            // contentType: "application/json",
+            dataType: "json",
+            success: function (res) {
+                console.log("success");
+                window.location.href = '<c:url value="/admin/customer-list?message=delete_success"/>';
+            },
+            error: function (res) {
+                console.log("fail");
+                window.location.href = '<c:url value="/admin/customer-list?message=error_system"/>';
+            }
+        });
+    }
 
-    // function warningBeforeDelete() {
-    //     showAlertBeforeDelete(function () {
-    //         e.preventDefault();
-    //         var buildingIds = $('#tableList').find('tbody input[type=checkbox]:checked').map(function () {
-    //             return $(this).val();
-    //         }).get();
-    //         executingDeleteBuildings(buildingIds);
-    //     });
-    // }
-
-    // $('#btnAssignmentBuilding').click(function (e) {
-    //     e.preventDefault();
-    //     var data = {};
-    //     data['buildingId'] = $('#buildingId').val();
-    //     var staffs = $('#staffList').find('tbody input[type=checkbox]:checked').map(function () {
-    //         return $(this).val();
-    //     }).get();
-    //     data['staffs'] = staffs;
-    //     if (staffs != '') {
-    //         executingAssignmentBuilding(data);
-    //     }
-    // });
+    $('#btnAssignmentCustomer').click(function (e) {
+        e.preventDefault();
+        var data = {};
+        data['customerId'] = $('#customerId').val();
+        var staffs = $('#staffList').find('tbody input[type=checkbox]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        data['staffs'] = staffs;
+        if (staffs != '') {
+            executingAssignmentCustomer(data);
+        }
+    });
 
 
     $('#btnSearchCustomer').click(function (e) {
@@ -324,26 +316,26 @@
         $('#listForm').submit();
     });
 
-    // xoá 1 building
-    // function deleteBuilding(id) {
-    //     showAlertBeforeDelete(function () {
-    //         // e.preventDefault();
-    //         var buildingId = [id];
-    //         executingDeleteBuildings(buildingId);
-    //     });
-    // }
-    //
-    // // xoá nhiều building
-    // $('#btnDeleteBuilding').click(function (e) {
-    //     e.preventDefault();
-    //     showAlertBeforeDelete(function () {
-    //         // e.preventDefault();
-    //         var buildingIds = $('#tableList').find('tbody input[type=checkbox]:checked').map(function () {
-    //             return $(this).val();
-    //         }).get();
-    //         executingDeleteBuildings(buildingIds);
-    //     });
-    // });
+    // xoá 1 customer
+    function deleteCustomer(id) {
+        showAlertBeforeDelete(function () {
+            // e.preventDefault();
+            var customerId = [id];
+            executingDeleteCustomers(customerId);
+        });
+    }
+
+    // xoá nhiều customer
+    $('#btnDeleteCustomer').click(function (e) {
+        e.preventDefault();
+        showAlertBeforeDelete(function () {
+            // e.preventDefault();
+            var customerIds = $('#tableList').find('tbody input[type=checkbox]:checked').map(function () {
+                return $(this).val();
+            }).get();
+            executingDeleteCustomers(customerIds);
+        });
+    });
 </script>
 </body>
 </html>

@@ -133,6 +133,7 @@
                                                    export="false"
                                                    class="table table-fcv-ace table-striped table-bordered table-hover dataTable no-footer"
                                                    style="margin: 3em 0 1.5em;">
+
                                         <display:column title="<fieldset class='form-group'>
 												                    <input type='checkbox' id='checkAll' class='check-box-element'>
 												                </fieldset>" class="center select-cell"
@@ -142,19 +143,23 @@
                                                        id="checkbox_${tableList.id}" class="check-box-element"/>
                                             </fieldset>
                                         </display:column>
+
+
                                         <display:column headerClass="text-left" property="userName" title="Tên"/>
                                         <display:column headerClass="text-left" property="fullName" title="full name"/>
                                         <display:column headerClass="col-actions" title="Thao tác">
-                                            <c:if test="${tableList.roleCode != 'MANAGER'}">
-                                                <a class="btn btn-sm btn-primary btn-edit" data-toggle="tooltip"
-                                                   title="Cập nhật người dùng"
-                                                   href='<c:url value="/admin/user-edit-${tableList.id}"/>'>
-                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                </a>
-                                            </c:if>
-                                            <c:if test="${tableList.roleCode == 'MANAGER'}">
-                                                <p>Không đươc thao tác</p>
-                                            </c:if>
+                                            <security:authorize access="hasRole('MANAGER')">
+                                                <c:if test="${tableList.roleCode != 'MANAGER'}">
+                                                    <a class="btn btn-sm btn-primary btn-edit" data-toggle="tooltip"
+                                                       title="Cập nhật người dùng"
+                                                       href='<c:url value="/admin/user-edit-${tableList.id}"/>'>
+                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${tableList.roleCode == 'MANAGER'}">
+                                                    <p>Không đươc thao tác</p>
+                                                </c:if>
+                                            </security:authorize>
                                         </display:column>
                                     </display:table>
                                 </div>
@@ -176,8 +181,8 @@
     });
 
     function warningBeforeDelete() {
-        showAlertBeforeDelete(function (e) {
-            e.preventDefault();
+        showAlertBeforeDelete(function () {
+            // e.preventDefault();
             var dataArray = $('tbody input[type=checkbox]:checked').map(function () {
                 return $(this).val();
             }).get();
@@ -187,12 +192,13 @@
 
     function deleteUser(data) {
         $.ajax({
-            url: '${formAjax}/',
+            url: '${formAjax}/' + data,
             type: 'DELETE',
             dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
+            // contentType: 'application/json',
+            // data: JSON.stringify(data),
             success: function (res) {
+                console.log(res);
                 window.location.href = "<c:url value='/admin/user-list?message=delete_success'/>";
             },
             error: function (res) {

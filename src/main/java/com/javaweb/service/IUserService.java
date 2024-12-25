@@ -21,7 +21,7 @@ public interface IUserService {
     void updatePassword(long id, PasswordDTO userDTO) throws MyException;
     UserDTO resetPassword(long id);
     UserDTO updateProfileOfUser(String id, UserDTO userDTO);
-    void delete(long[] ids);
+    void delete(Long[] ids);
 //    ResponseDTO listStaff(Long buildingId);
     List<UserDTO> getAllUsers(Pageable pageable);
     int countTotalItems();

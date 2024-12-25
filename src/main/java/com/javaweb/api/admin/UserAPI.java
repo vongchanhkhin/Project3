@@ -47,10 +47,10 @@ public class UserAPI {
         return ResponseEntity.ok(userService.updateProfileOfUser(username, userDTO));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteUsers(@RequestBody long[] idList) {
-        if (idList.length > 0) {
-            userService.delete(idList);
+    @DeleteMapping("/{ids}")
+    public ResponseEntity<?> deleteUsers(@PathVariable Long[] ids) {
+        if (ids.length > 0) {
+            userService.delete(ids);
         }
         return ResponseEntity.noContent().build();
     }
