@@ -49,7 +49,7 @@ public class BuildingAPI {
     @PutMapping
     public ResponseEntity<?> updateAssignmentBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
         try {
-            buildingService.addAssignmentStaff(assignmentBuildingDTO);
+            buildingService.updateAssignmentStaff(assignmentBuildingDTO);
             return ResponseEntity.ok(assignmentBuildingDTO);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

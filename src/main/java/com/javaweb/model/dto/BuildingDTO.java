@@ -32,7 +32,7 @@ public class BuildingDTO extends AbstractDTO {
     private Long rentPrice;
     private String serviceFee;
     private Double brokerageFee;
-    private String image;
+    private String avatar;
     private String imageBase64;
     private String imageName;
 
@@ -71,12 +71,12 @@ public class BuildingDTO extends AbstractDTO {
         this.structure = structure;
     }
 
-    public String getImage() {
-        return image;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getImageBase64() {

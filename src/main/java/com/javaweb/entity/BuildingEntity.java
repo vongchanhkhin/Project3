@@ -56,6 +56,9 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "overtimefee")
     private String overtimeFee;
 
+    @Column(name = "waterfee")
+    private String waterFee;
+
     @Column(name = "electricityfee")
     private String electricityFee;
 
@@ -79,6 +82,9 @@ public class BuildingEntity extends BaseEntity {
 
     @Column(name = "note")
     private String note;
+
+    @Column(name = "avatar")
+    private String avatar;
 
     @Column(name = "managername")
     private String managerName;
@@ -242,6 +248,14 @@ public class BuildingEntity extends BaseEntity {
         this.overtimeFee = overtimeFee;
     }
 
+    public String getWaterFee() {
+        return waterFee;
+    }
+
+    public void setWaterFee(String waterFee) {
+        this.waterFee = waterFee;
+    }
+
     public String getElectricityFee() {
         return electricityFee;
     }
@@ -292,6 +306,14 @@ public class BuildingEntity extends BaseEntity {
 
     public void setTypeCode(String typeCode) {
         this.typeCode = typeCode;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getManagerName() {

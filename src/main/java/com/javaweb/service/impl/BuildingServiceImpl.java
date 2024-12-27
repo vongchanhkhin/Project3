@@ -13,11 +13,14 @@ import com.javaweb.model.response.StaffResponseDTO;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.service.IBuildingService;
+import com.javaweb.utils.UploadFileUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,9 @@ public class BuildingServiceImpl implements IBuildingService {
 
     @Autowired
     private BuildingConverter buildingConverter;
+
+    @Autowired
+    private UploadFileUtils uploadFileUtils;
 
     @Override
     public ResponseDTO getAllStaffInAssignmentBuilding(Long buildingId) {
@@ -78,7 +84,7 @@ public class BuildingServiceImpl implements IBuildingService {
     @Override
     public void addOrUpdateBuilding(BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = buildingConverter.toBuildingEntity(buildingDTO);
-
+        saveThumbnail(buildingDTO, buildingEntity);
         buildingRepository.save(buildingEntity);
 
 //        if (buildingDTO.getId() == null) {
@@ -102,11 +108,26 @@ public class BuildingServiceImpl implements IBuildingService {
     }
 
     @Override
-    public void addAssignmentStaff(AssignmentBuildingDTO assignmentBuildingDTO) {
+    public void updateAssignmentStaff(AssignmentBuildingDTO assignmentBuildingDTO) {
         BuildingEntity buildingEntity = buildingRepository.findById(assignmentBuildingDTO.getBuildingId()).get();
         List<UserEntity> staffs = userRepository.findByIdIn(assignmentBuildingDTO.getStaffs());
         buildingEntity.setStaff(staffs);
 
         buildingRepository.save(buildingEntity);
+    }
+
+    private void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
+        String path = "/building/" + buildingDTO.getImageName();
+        if (null != buildingDTO.getImageBase64()) {
+            if (null != buildingEntity.getAvatar()) {
+                if (!path.equals(buildingEntity.getAvatar())) {
+                    File file = new File("C://images" + buildingEntity.getAvatar());
+                    file.delete();
+                }
+            }
+            byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());
+            uploadFileUtils.writeOrUpdate(path, bytes);
+            buildingEntity.setAvatar(path);
+        }
     }
 }

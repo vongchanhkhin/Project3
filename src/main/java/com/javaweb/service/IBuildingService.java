@@ -18,5 +18,5 @@ public interface IBuildingService {
     void addOrUpdateBuilding(BuildingDTO buildingDTO);
     void deleteBuildings(Long[] ids);
     int countTotalItems();
-    void addAssignmentStaff(AssignmentBuildingDTO assignmentBuildingDTO);
+    void updateAssignmentStaff(AssignmentBuildingDTO assignmentBuildingDTO);
 }

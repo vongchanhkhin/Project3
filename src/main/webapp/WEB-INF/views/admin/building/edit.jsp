@@ -198,14 +198,14 @@
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Hình ảnh</label>
-                                <%--                            <input type="file" class="col-xs-3" name="" id="uploadImage">--%>
-                                <%--                            <c:if test="${not empty buildingEdit.image}">--%>
-                                <%--                                <div class="col-xs-6">--%>
-                                <%--                                    <c:set var="imagePath" value="/repository/${buildingEdit.image}"/>--%>
-                                <%--                                    <img src="${imagePath}" id="viewImage" width="300px" height="300px"--%>
-                                <%--                                         alt="Building Image">--%>
-                                <%--                                </div>--%>
-                                <%--                            </c:if>--%>
+                            <input type="file" class="col-xs-3" name="" id="uploadImage">
+                            <c:if test="${not empty buildingEdit.avatar}">
+                                <div class="col-xs-6">
+                                    <c:set var="imagePath" value="/repository${buildingEdit.avatar}"/>
+                                    <img src="${imagePath}" id="viewImage" width="300px" height="300px"
+                                         style="overflow: hidden; object-fit: cover">
+                                </div>
+                            </c:if>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3"></label>
@@ -232,6 +232,9 @@
     </div>
 </div>
 <script>
+    var imageBase64 = '';
+    var imageName = '';
+
     window.onload = function () {
         var formData = $('#form-edit').serializeArray();
         $.each(formData, function (i, v) {
@@ -250,6 +253,17 @@
             }
         });
     }
+
+    function openImage(input, imageView) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#' + imageView).attr('src', reader.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
     $('#btnAddOrUpdateBuilding').click(function () {
         var data = {};
         var typeCode = [];
@@ -261,18 +275,28 @@
                 typeCode.push(v.value);
             }
 
-            // if(imageBase64 !== '') {
-            //     data['imageBase64'] = imageBase64;
-            //     data['imageName'] = imageName;
-            // }
+            if (imageBase64 !== '') {
+                data['imageBase64'] = imageBase64;
+                data['imageName'] = imageName;
+            }
         });
         data['typeCode'] = typeCode;
 
 
         if (typeCode != '') {
             executingAddOrUpdateBuilding(data);
-        }
-        else window.location.href = '<c:url value="/admin/building-edit?typeCode=require"/>';
+        } else window.location.href = '<c:url value="/admin/building-edit?typeCode=require"/>';
+    });
+
+    $('#uploadImage').change(function (event) {
+        var reader = new FileReader();
+        var file = $(this)[0].files[0];
+        reader.onload = function (e) {
+            imageBase64 = e.target.result;
+            imageName = file.name; // ten hinh khong dau, khoang cach. Dat theo format sau: a-b-c
+        };
+        reader.readAsDataURL(file);
+        openImage(this, "viewImage");
     });
 
     $('#btnCancel').click(function () {
@@ -288,7 +312,7 @@
             dataType: "json",
             success: function (res) {
                 console.log("success");
-                if(res.id != null)
+                if (res.id != null)
                     window.location.href = '<c:url value="/admin/building-list?message=update_success"/>'
                 else window.location.href = '<c:url value="/admin/building-list?message=insert_success"/>';
             },
